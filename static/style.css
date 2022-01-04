@@ -1,0 +1,41 @@
+body {
+	font-family: sans-serif;
+	font-size: 14pt;
+	/*padding: 0px;
+	margin: 0px;*/
+}
+
+h1 {
+	text-align: center;
+	font-size: 2em;
+}
+
+@media (orientation: landscape) {
+	p {
+		width: 50%;
+		margin: 1em auto;
+	}
+}
+
+.centered_container {
+	text-align: center;
+}
+
+a.button {
+	display: inline-block;
+	padding: 1em;
+	background: #1f6fef;
+	text-decoration: none;
+	color: #000;
+}
+
+#privacy_policy {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	background: #1fef1f;
+	text-align: center;
+	font-size: .75em;
+	padding: .25em 0px;
+}
