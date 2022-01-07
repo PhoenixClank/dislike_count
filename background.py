@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+import settings
 
 import sqlite3
 import json
@@ -67,7 +67,7 @@ def handle_channel(credentials):
 			req_videos = yt.videos().list_next(req_videos, resp_videos)
 
 if __name__ == '__main__':
-	conn = sqlite3.connect('file:../secret_stuff/dislike_count/user_secrets.db?mode=ro')
+	conn = sqlite3.connect(settings.user_secrets_file)
 	with conn:
 		conn.row_factory = sqlite3.Row
 		strings = tuple(row['json'] for row in conn.execute('SELECT json FROM token'))
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 		try:
 			handle_channel(credentials)
 		except RefreshError:
-			conn = sqlite3.connect('../secret_stuff/dislike_count/user_secrets.db')
+			conn = sqlite3.connect(settings.user_secrets_file)
 			with conn:
 				conn.execute('DELETE FROM token WHERE json=?', (text,))
 			conn.close()

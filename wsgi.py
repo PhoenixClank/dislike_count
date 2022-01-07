@@ -1,3 +1,5 @@
+import settings
+
 import secrets
 import sqlite3
 
@@ -13,8 +15,8 @@ app.secret_key = secrets.token_hex()
 
 @app.route('/authorize')
 def authorize():
-	flow = Flow.from_client_secrets_file('../secret_stuff/dislike_count/server_secret.json', scopes=('https://www.googleapis.com/auth/youtube',))
-	flow.redirect_uri = 'https://phoenixc.uber.space/dislike_count/callback'
+	flow = Flow.from_client_secrets_file(settings.server_secret_file, scopes=('https://www.googleapis.com/auth/youtube',))
+	flow.redirect_uri = settings.callback_url
 
 	url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
 	flask.session['state'] = state
@@ -22,8 +24,8 @@ def authorize():
 
 @app.route('/callback')
 def callback():
-	flow = Flow.from_client_secrets_file('../secret_stuff/dislike_count/server_secret.json', scopes=('https://www.googleapis.com/auth/youtube',), state=flask.session['state'])
-	flow.redirect_uri = 'https://phoenixc.uber.space/dislike_count/callback'
+	flow = Flow.from_client_secrets_file(settings.server_secret_file, scopes=('https://www.googleapis.com/auth/youtube',), state=flask.session['state'])
+	flow.redirect_uri = settings.callback_url
 
 	flask.session = {}
 
@@ -33,7 +35,7 @@ def callback():
 		return flask.redirect('/dislike_count/static/index.html')
 	credentials = flow.credentials
 
-	conn = sqlite3.connect('../secret_stuff/dislike_count/user_secrets.db')
+	conn = sqlite3.connect(settings.user_secrets_file)
 	with conn:
 		conn.execute('INSERT INTO token(json) VALUES (?)', (credentials.to_json(),))
 	conn.close()
