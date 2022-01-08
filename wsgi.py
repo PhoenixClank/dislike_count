@@ -15,7 +15,7 @@ app.secret_key = secrets.token_hex()
 
 @app.route('/')
 def index():
-	return flask.route('/dislike_count/static/index.html', code=308)
+	return flask.redirect('/dislike_count/static/index.html', code=308)
 
 @app.route('/authorize')
 def authorize():
